@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <iostream>
+#include <string.h>
 using namespace std;
 
 #define TEMP_MIN_THRESHOLD 0.00f
@@ -11,48 +12,37 @@ using namespace std;
 #define CHARGE_RATE_MIN_THRESHOLD 0.00f
 #define CHARGE_RATE_MAX_THRESHOLD 0.80f
 
-bool checkValueInRange(float min , float max, const float &valueToCheck)
+bool checkValueInRange(float min , float max, const float &valueToCheck ,const std::string &paramName)
 {
     if(valueToCheck >= min && valueToCheck <=max) return true;
-    else return false;
+    else
+    {
+        cout << paramName << " out of range!" <<endl;
+        return false;
+    }
 }
 
-bool temperatureIsOk(const float temperature)
+bool checkTemperatureIsOk(const float temperature)
 {
-    if(!checkValueInRange(TEMP_MIN_THRESHOLD , TEMP_MAX_THRESHOLD,temperature))
-    {
-    cout << "Temperature out of range!\n";
-    return false;
-    }
-    else return true;
+    return checkValueInRange(TEMP_MIN_THRESHOLD , TEMP_MAX_THRESHOLD,temperature, "Temperature");
 }
 
-bool socIsOk(const float soc)
+bool checkSocIsOk(const float soc)
 {
-    if(!checkValueInRange(SOC_MIN_THRESHOLD , SOC_MAX_THRESHOLD,soc))
-    {
-    cout << "State of Charge out of range!\n";
-    return false;
-    }
-    else return true;
+    return checkValueInRange(SOC_MIN_THRESHOLD , SOC_MAX_THRESHOLD,soc , "State of Charge");
 }
 
-bool chargeRateIsOk(const float chargeRate)
+bool checkChargeRateIsOk(const float chargeRate)
 {
-    if(!checkValueInRange(CHARGE_RATE_MIN_THRESHOLD , CHARGE_RATE_MAX_THRESHOLD,chargeRate))
-    {
-    cout << "Charge Rate out of range!\n";
-    return false;
-    }
-    else return true;
+    return checkValueInRange(CHARGE_RATE_MIN_THRESHOLD , CHARGE_RATE_MAX_THRESHOLD,chargeRate, "Charge Rate");
 }
 
 bool batteryIsOk(const float temperature,const  float soc,const  float chargeRate) {
   bool temperatureOkIndicator , socOkIndicator , chargeRateOkIndicator = false ;
 
-  temperatureOkIndicator = temperatureIsOk(temperature);
-  socOkIndicator = socIsOk(soc) ;
-  chargeRateOkIndicator = chargeRateIsOk(chargeRate);
+  temperatureOkIndicator = checkTemperatureIsOk(temperature);
+  socOkIndicator = checkSocIsOk(soc) ;
+  chargeRateOkIndicator = checkChargeRateIsOk(chargeRate);
 
   return ( temperatureOkIndicator && socOkIndicator && chargeRateOkIndicator);
 }
